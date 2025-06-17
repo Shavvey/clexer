@@ -3,7 +3,7 @@ CC=gcc
 FLAGS=-W -Wall -g
 # sdl flags and included libs
 # executable name, object files to be created, and dependencies for object files
-EXEC=rbtree
+EXEC=clexer
 OBJS=src/lexer.c src/main.c
 DEPS=src/lexer.h
 
