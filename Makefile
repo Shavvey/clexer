@@ -5,7 +5,7 @@ FLAGS=-W -Wall -g
 # executable name, object files to be created, and dependencies for object files
 EXEC=clexer
 OBJS=src/lexer.c src/main.c
-DEPS=src/lexer.h
+DEPS=src/lexer.h src/common.h
 
 # make dependencies to create the final executable
 all: $(EXEC)

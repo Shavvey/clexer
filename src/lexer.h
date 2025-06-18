@@ -1,5 +1,11 @@
+#ifndef INCLUDE_SRC_LEXER_H_
+#define INCLUDE_SRC_LEXER_H_
+
 #include <stddef.h>
 #include <stdio.h>
+
+// DEPS
+#include "parser.h"
 
 // TYPE DECLARATIONS
 typedef struct _Token {
@@ -7,18 +13,19 @@ typedef struct _Token {
   const char *val;
   unsigned int start;
   unsigned int end;
-}Token;
+} Token;
 
 typedef struct _TokenList {
   size_t capacity;
   size_t size;
   Token *tokens; 
-}TokenList;
+} TokenList;
 
 typedef struct _Lexer {
   TokenList tokens;
+  TokenMap map;
   FILE *file;
-}Lexer;
+} Lexer;
 
 // API
 Lexer tokenize(FILE *file, unsigned int nthreads);
@@ -27,3 +34,5 @@ TokenList make_token_list(size_t size);
 Token get_first(TokenList *tlist);
 Token append(TokenList *tlist);
 Lexer merge(Lexer *lhs, Lexer *rhs);
+
+#endif  // INCLUDE_SRC_LEXER_H_
