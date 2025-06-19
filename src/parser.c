@@ -21,7 +21,8 @@ Rule parse_rule(const char *line) {
       eprintf("[ERROR]: Could not parse rule! Line expectedly ended");
       exit(EXIT_FAILURE);
     }
-    tcount++;
+    if (*line != ' ')
+      tcount++;
   }
 
   // reset char count and move passed ':'
@@ -37,22 +38,34 @@ Rule parse_rule(const char *line) {
     ++rcount;
   }
 
-  // alloc token name and regex into contiguous series of bytes
+  // alloc token name and regex into contiguous slice of mem
+  /* rule contains =>
+      - tname at [0, tcount + 1] (1 for null term)
+      - regex at [tcount + 1 + 1, tcount + rcount + 2] */
   char *rule = (char *)malloc(sizeof(char) * (rcount + 1 + tcount + 1));
   tname = rule;
-  regex = rule + tcount + 1;
+  regex = rule + tcount + 1 + 1;
   // copy token name and regex
   strncpy(tname, token_start, tcount);
   strncpy(regex, regex_start, rcount);
+  // explicitly null terminate (just in case)
+  tname[tcount + 1] = '\0';
+  regex[rcount + 1] = '\0';
+  strip_newline(regex);
   // construct new rule
-  Rule new_rule = {.tname = tname, .regex = regex};
-  return new_rule;
+  Rule r = {.tname = tname, .regex = regex};
+  return r;
+}
+
+static TokenMap new_token_map(size_t size) {
+  TokenMap tm = {0};
+  return tm;
 }
 
 TokenMap gen_rules(const char *fname) {
   // NOTE: we don't expect each key-value pair to be longer
   // than this length (we can check this assumption w/ asserts if needed)
-  const int BUFFER_LEN = 255;
+  const int BUFFER_LEN = 1 << 8;
   char buffer[BUFFER_LEN];
   FILE *config_file = fopen(fname, "r");
 
