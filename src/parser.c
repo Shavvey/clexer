@@ -6,15 +6,15 @@
 Rule parse_rule(const char *line) {
   int tcount;
   int rcount;
-  
+
   char *tname;
   char *regex;
 
   // chop out whitespace
-  while (*line == ' ') line++;
+  while (*line == ' ')
+    line++;
 
   const char *token_start = line;
-
 
   while (*(++line) != ':') {
     if (*line == '\0') {
@@ -24,31 +24,28 @@ Rule parse_rule(const char *line) {
     tcount++;
   }
 
-  // alloc for token name and copy using counted chars
-  tname = (char *)malloc(sizeof(char) * (tcount + 1));
-  strncpy(tname, token_start, tcount);
-  tname[tcount + 1] = '\0'; // explicitly null terminate (just in case)
-  printf("[INFO]: Token name is %s\n", tname);
-  
   // reset char count and move passed ':'
   ++line;
 
   // chop out whitespace, again
-  while (*line == ' ') ++line;
+  while (*line == ' ')
+    ++line;
+
   const char *regex_start = line;
 
-  while (*(++token_start) != '\0') {
+  while (*(++line) != '\0') {
     ++rcount;
   }
-  
-  regex = (char*)malloc(sizeof(char)*(rcount + 1));
-  strncpy(regex, regex_start, rcount);
-  regex[tcount + 1] = '\0'; // explicitly null terminate
-  
-  printf("[INFO]: Regex is %s\n", regex);
 
+  // alloc token name and regex into contiguous series of bytes
+  char *rule = (char *)malloc(sizeof(char) * (rcount + 1 + tcount + 1));
+  tname = rule;
+  regex = rule + tcount + 1;
+  // copy token name and regex
+  strncpy(tname, token_start, tcount);
+  strncpy(regex, regex_start, rcount);
   // construct new rule
-  Rule new_rule = {0};
+  Rule new_rule = {.tname = tname, .regex = regex};
   return new_rule;
 }
 
