@@ -3,8 +3,8 @@
 #include <stdio.h>
 // TYPE DECLARATIONS
 typedef struct _Rule {
-  const char* file_content;
-  const char* token_name;
+  const char* tname;
+  const char* regex;
 } Rule;
 
 typedef struct _TokenMap {
@@ -13,6 +13,8 @@ typedef struct _TokenMap {
 } TokenMap;
 
 // API
-// NOTE: right now, I woudl like to use a yaml file to generate the token we are using
-TokenMap gen_rules(FILE* yaml);
+// takes in key-value pairs delimited by a colon.
+// The key represents the name/kind of token, and the
+// value is the regex
+TokenMap gen_rules(const char *fname);
 #endif  // INCLUDE_SRC_PARSER_H_

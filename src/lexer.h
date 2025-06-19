@@ -28,7 +28,7 @@ typedef struct _Lexer {
 } Lexer;
 
 // API
-Lexer tokenize(FILE *file, unsigned int nthreads);
+Lexer tokenize(const char *text, unsigned int nthreads);
 void print_tokens(Lexer *lexer);
 TokenList make_token_list(size_t size);
 Token get_first(TokenList *tlist);

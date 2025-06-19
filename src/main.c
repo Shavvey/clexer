@@ -1,8 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "parser.h"
 
 int main(int argc, char *argv[]) {
-  printf("Hello, World!\n");
-  return EXIT_SUCCESS;
+  gen_rules("example-map.conf");
 }
-
