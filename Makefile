@@ -19,5 +19,6 @@ $(EXEC): $(OBJS)
 	$(CC) $(CFLAGS) $(SDL_CFLAGS) $(OBJS) -o $(EXEC) 
 
 # clean out the object files and the final executable
+.PHONY: clean
 clean:
 	rm $(EXEC) src/*.o

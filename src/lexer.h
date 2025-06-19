@@ -9,10 +9,8 @@
 
 // TYPE DECLARATIONS
 typedef struct _Token {
-  const char *name;
-  const char *val;
-  unsigned int start;
-  unsigned int end;
+  const char *kind;
+  const char *content;
 } Token;
 
 typedef struct _TokenList {
@@ -22,9 +20,11 @@ typedef struct _TokenList {
 } TokenList;
 
 typedef struct _Lexer {
+  const char* text;
   TokenList tokens;
   TokenMap map;
-  FILE *file;
+  unsigned int cursor;
+  unsigned int bol;
 } Lexer;
 
 // API
