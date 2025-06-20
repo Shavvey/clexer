@@ -57,8 +57,10 @@ Rule parse_rule(const char *line) {
   return r;
 }
 
-static TokenMap new_token_map(size_t size) {
-  TokenMap tm = {0};
+static TokenMap new_token_map(size_t capacity) {
+  TokenMap tm = {.size = 0,
+                 .capacity = capacity,
+                 .items = (Rule *)malloc(sizeof(Rule) * capacity)};
   return tm;
 }
 
@@ -68,6 +70,8 @@ TokenMap gen_rules(const char *fname) {
   const int BUFFER_LEN = 1 << 8;
   char buffer[BUFFER_LEN];
   FILE *config_file = fopen(fname, "r");
+  const unsigned int lcount = get_num_lines(config_file);
+  printf("Number of lines => %u\n", lcount);
 
   if (config_file == NULL) {
     eprintf("[ERROR]: Config file is undefined!\n");
@@ -83,6 +87,6 @@ TokenMap gen_rules(const char *fname) {
   fclose(config_file);
 
   // parse and return token map
-  TokenMap tk = {0};
+  TokenMap tk = new_token_map(lcount);
   return tk;
 }
