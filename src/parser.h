@@ -10,7 +10,7 @@ typedef struct _Rule {
 typedef struct _TokenMap {
   size_t size;
   size_t capacity;
-  const Rule *rules;
+  Rule *items;
 } TokenMap;
 
 // API

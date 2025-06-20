@@ -16,15 +16,15 @@ typedef struct _Token {
 typedef struct _TokenList {
   size_t capacity;
   size_t size;
-  Token *tokens; 
+  Token *items; 
 } TokenList;
 
 typedef struct _Lexer {
-  const char* text;
+  const char* content;
   TokenList tokens;
-  TokenMap map;
-  unsigned int cursor;
-  unsigned int bol;
+  const TokenMap map;
+  unsigned int cursor; // points to current line content
+  unsigned int bol; // beginning of line
 } Lexer;
 
 // API
