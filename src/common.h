@@ -2,6 +2,7 @@
 #define INCLUDE_SRC_COMMON_H_
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #define eprintf(...) do { fprintf(stderr, __VA_ARGS__); }while(0)
 #define UNIMPLEMENTED(...) \
 do {\
@@ -12,15 +13,15 @@ do {\
 #define AL_RESIZE_INC 1 << 3
 
 #define alist_last(al) (assert((al)-> size > 0 && "[ERROR]: No room in array_list!"),\
-(al)->items[(da)->count-1]) 
+(al)->items[(al)->count-1]) 
 
-#define alist_append(al, item) do {                                         \
-  if ((al)->capacity - (al)->size == 0) {                                   \
-    (al)->capacity += AL_RESIZE_INC;                                        \
-    (al)->items = realloc((al)->items, (da)->capcity*sizeof(*(al)->items)); \
-    assert((al)->items != NULL && "[ERROR]: Array list alloc failed!");     \
-  }                                                                         \
-  (al)->items[(al)->size++] = (item);                                       \
+#define alist_append(al, item) do {                                          \
+  if ((al)->capacity - (al)->size == 0) {                                    \
+    (al)->capacity += AL_RESIZE_INC;                                         \
+    (al)->items = realloc((al)->items, (al)->capacity*sizeof(*(al)->items)); \
+    assert((al)->items != NULL && "[ERROR]: Array list alloc failed!");      \
+  }                                                                          \
+  (al)->items[(al)->size++] = (item);                                        \
 }while(0)
 
 

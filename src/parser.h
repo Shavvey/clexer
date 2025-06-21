@@ -18,5 +18,6 @@ typedef struct _TokenMap {
 // The key represents the name/kind of token, and the
 // value is the regex
 TokenMap gen_rules(const char *fname);
-void print_rule(Rule *r);
+void print_rule(Rule *rule);
+void print_tmap(TokenMap *tk);
 #endif  // INCLUDE_SRC_PARSER_H_

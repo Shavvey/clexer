@@ -78,15 +78,29 @@ TokenMap gen_rules(const char *fname) {
     exit(EXIT_FAILURE);
   }
 
+  // parse and return token map
+  TokenMap tk = new_token_map(lcount);
+
   // use fget to return each line up to the buffer size
   while (fgets(buffer, BUFFER_LEN, config_file)) {
     printf("Buffer => %s", buffer);
     Rule r = parse_rule(buffer);
+    alist_append(&tk, r);
   }
   // close out of file
   fclose(config_file);
-
-  // parse and return token map
-  TokenMap tk = new_token_map(lcount);
+  print_tmap(&tk);
   return tk;
+}
+
+void print_rule(Rule *rule) {
+  printf("Token name: %s\n", rule->tname);
+  printf("Regex %s\n", rule->regex);
+}
+
+void print_tmap(TokenMap *tk) {
+  for (int i = 0; i < tk->size; i++) {
+    Rule r = tk->items[i];
+    print_rule(&r);
+  }
 }
