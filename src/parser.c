@@ -4,11 +4,8 @@
 #include <string.h>
 
 Rule parse_rule(const char *line) {
-  int tcount;
-  int rcount;
-
-  char *tname;
-  char *regex;
+  int tcount = 1;
+  int rcount = 1;
 
   // chop out whitespace
   while (*line == ' ')
@@ -37,20 +34,12 @@ Rule parse_rule(const char *line) {
   while (*(++line) != '\0') {
     ++rcount;
   }
-
-  // alloc token name and regex into contiguous slice of mem
-  /* rule contains =>
-      - tname at [0, tcount + 1] (1 for null term)
-      - regex at [tcount + 1 + 1, tcount + rcount + 2] */
-  char *rule = (char *)malloc(sizeof(char) * (rcount + 1 + tcount + 1));
-  tname = rule;
-  regex = rule + tcount + 1 + 1;
+  char *tname = malloc(sizeof(char) * tcount);
+  char *regex = malloc(sizeof(char) * rcount);
   // copy token name and regex
+  printf("Token size: %d\n", tcount);
   strncpy(tname, token_start, tcount);
   strncpy(regex, regex_start, rcount);
-  // explicitly null terminate (just in case)
-  tname[tcount + 1] = '\0';
-  regex[rcount + 1] = '\0';
   strip_newline(regex);
   // construct new rule
   Rule r = {.tname = tname, .regex = regex};
@@ -71,26 +60,26 @@ TokenMap gen_rules(const char *fname) {
   char buffer[BUFFER_LEN];
   FILE *config_file = fopen(fname, "r");
   const unsigned int lcount = get_num_lines(config_file);
-  printf("Number of lines => %u\n", lcount);
 
   if (config_file == NULL) {
     eprintf("[ERROR]: Config file is undefined!\n");
+    fclose(config_file);
     exit(EXIT_FAILURE);
   }
 
   // parse and return token map
-  TokenMap tk = new_token_map(lcount);
+  TokenMap tm = new_token_map(lcount);
 
   // use fget to return each line up to the buffer size
   while (fgets(buffer, BUFFER_LEN, config_file)) {
-    printf("Buffer => %s", buffer);
+    // parse rule and append to token map
     Rule r = parse_rule(buffer);
-    alist_append(&tk, r);
+    alist_append(&tm, r);
   }
   // close out of file
   fclose(config_file);
-  print_tmap(&tk);
-  return tk;
+  print_tmap(&tm);
+  return tm;
 }
 
 void print_rule(Rule *rule) {
@@ -98,9 +87,9 @@ void print_rule(Rule *rule) {
   printf("Regex %s\n", rule->regex);
 }
 
-void print_tmap(TokenMap *tk) {
-  for (int i = 0; i < tk->size; i++) {
-    Rule r = tk->items[i];
+void print_tmap(TokenMap *tm) {
+  for (int i = 0; i < tm->size; i++) {
+    Rule r = tm->items[i];
     print_rule(&r);
   }
 }
