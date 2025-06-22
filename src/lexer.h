@@ -39,11 +39,11 @@ typedef struct _MatchSet {
 } MatchSet;
 
 // API
-Lexer tokenize(const char *text, unsigned int nthreads);
+TokenList tokenize(const char *text, const char* conf);
 void print_tokens(Lexer *lexer);
-TokenList make_token_list(size_t size);
 Token get_first(TokenList *tlist);
 Token append(TokenList *tlist);
 Lexer merge(Lexer *lhs, Lexer *rhs);
+Lexer new_lexer(const char* text, const TokenMap tm);
 
 #endif  // INCLUDE_SRC_LEXER_H_
