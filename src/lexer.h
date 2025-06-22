@@ -30,7 +30,7 @@ typedef struct _Lexer {
 typedef struct _Match {
   int idx;
   int lenght;
-}Match;
+} Match;
 
 typedef struct _MatchSet {
   size_t capacity;
