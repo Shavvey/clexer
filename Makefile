@@ -4,8 +4,8 @@ FLAGS=-W -Wall -g
 # sdl flags and included libs
 # executable name, object files to be created, and dependencies for object files
 EXEC=clexer
-OBJS=src/lexer.o src/main.o src/parser.o src/common.o src/re.c
-DEPS=src/lexer.h src/common.h src/parser.h src/regex/re.h
+OBJS=src/lexer.o src/main.o src/parser.o src/common.o src/regex/re.c
+DEPS=src/lexer.h src/common.h src/parser.h src/regex/re.h 
 
 # make dependencies to create the final executable
 all: $(EXEC)

@@ -27,6 +27,17 @@ typedef struct _Lexer {
   unsigned int bol; // beginning of line
 } Lexer;
 
+typedef struct _Match {
+  int idx;
+  int lenght;
+}Match;
+
+typedef struct _MatchSet {
+  size_t capacity;
+  size_t size;
+  Match *items; 
+} MatchSet;
+
 // API
 Lexer tokenize(const char *text, unsigned int nthreads);
 void print_tokens(Lexer *lexer);

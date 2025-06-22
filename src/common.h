@@ -12,7 +12,7 @@ do {\
 
 #define AL_RESIZE_INC 1 << 3
 
-#define alist_last(al) (assert((al)-> size > 0 && "[ERROR]: No room in array_list!"),\
+#define alist_last(al) (assert((al)-> size > 0 && "[ERROR]: No room in array list!"),\
 (al)->items[(al)->count-1]) 
 
 #define alist_append(al, item) do {                                          \
