@@ -1,4 +1,5 @@
 clexer
 src/*.o
 src/*.gch
+src/regex/*.o
 .DS_Store

@@ -39,7 +39,7 @@ typedef struct _MatchSet {
 } MatchSet;
 
 // API
-TokenList tokenize(const char *text, const char* conf);
+TokenList tokenize(const char *text, Lexer *l);
 void print_tokens(Lexer *lexer);
 Token get_first(TokenList *tlist);
 Token append(TokenList *tlist);
