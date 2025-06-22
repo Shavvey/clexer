@@ -1,1 +1,4 @@
 clexer
+src/*.o
+src/*.gch
+.DS_Store

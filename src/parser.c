@@ -15,7 +15,8 @@ Rule parse_rule(const char *line) {
 
   while (*(++line) != ':') {
     if (*line == '\0') {
-      eprintf("[ERROR]: Could not parse rule! Line expectedly ended");
+      eprintf(
+          "[ERROR]: Could not parse rule because the line unexpectedly ended!");
       exit(EXIT_FAILURE);
     }
     if (*line != ' ')
@@ -34,10 +35,10 @@ Rule parse_rule(const char *line) {
   while (*(++line) != '\0') {
     ++rcount;
   }
+  // TODO: throw this into a big memory slice, for caching reasons
   char *tname = malloc(sizeof(char) * tcount);
   char *regex = malloc(sizeof(char) * rcount);
   // copy token name and regex
-  printf("Token size: %d\n", tcount);
   strncpy(tname, token_start, tcount);
   strncpy(regex, regex_start, rcount);
   strip_newline(regex);
