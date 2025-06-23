@@ -36,8 +36,8 @@ Rule parse_rule(const char *line) {
     ++rcount;
   }
   // TODO: throw this into a big memory slice, for caching reasons
-  char *tname = malloc(sizeof(char) * tcount);
-  char *regex = malloc(sizeof(char) * rcount);
+  char *tname = (char *)malloc(sizeof(char) * tcount);
+  char *regex = (char *)malloc(sizeof(char) * rcount);
   // copy token name and regex
   strncpy(tname, token_start, tcount);
   strncpy(regex, regex_start, rcount);
