@@ -79,7 +79,6 @@ TokenMap gen_rules(const char *fname) {
   }
   // close out of file
   fclose(config_file);
-  print_tmap(&tm);
   return tm;
 }
 
