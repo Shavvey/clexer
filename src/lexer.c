@@ -26,15 +26,24 @@ Lexer new_lexer(const char *text, const TokenMap *tm) {
   return l;
 }
 
-void get_matches(MatchSet *ms, const char* text, re_t* regexes) {
-   
+MatchSet new_matches(size_t capacity) {
+  MatchSet ms = {.capacity = capacity,
+                 .size = 0,
+                 .items = (Match *)malloc(sizeof(Match) * capacity)};
+  return ms;
 }
 
-void clear_matches(MatchSet *ms) {}
+void get_matches(MatchSet *ms, const char *text, re_t *regexes) {
+  
+}
+
+void clear_matches(MatchSet *ms) {
+  
+}
 
 TokenList tokenize(Lexer *l) {
   chop_left(l);
-  MatchSet ms = {0};
+  MatchSet ms = new_matches(l->map.size);
   re_t regexes[l->map.size];
   TokenMap tp = l->map;
 
@@ -44,7 +53,9 @@ TokenList tokenize(Lexer *l) {
     print_rule(&r);
     re_t regex = re_compile(r.regex);
     regexes[i] = regex;
-  } 
+  }
+
+  get_matches(&ms, l->content + l->cursor, regexes);
 
   return l->tokens;
 }
