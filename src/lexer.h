@@ -41,10 +41,8 @@ typedef struct _MatchSet {
 
 // API
 TokenList tokenize(Lexer *l);
-void print_tokens(Lexer *lexer);
 Token get_first(TokenList *tlist);
-Token append(TokenList *tlist);
-Lexer merge(Lexer *lhs, Lexer *rhs);
+void print_tokens(TokenList *tlist);
 Lexer new_lexer(const char* text, const TokenMap *tm);
 
 #endif  // INCLUDE_SRC_LEXER_H_
