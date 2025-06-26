@@ -107,3 +107,9 @@ TokenList tokenize(Lexer *l) {
   }
   return l->tokens;
 }
+
+TokenList tokenize_file(const char *file_name, const TokenMap *tm) {
+  FileContents fc = drain_file(file_name);
+  Lexer l = new_lexer(fc.items, tm);
+  return tokenize(&l);
+}

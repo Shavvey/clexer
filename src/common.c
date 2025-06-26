@@ -22,3 +22,26 @@ unsigned int get_num_lines(FILE *file) {
   rewind(file);
   return lcount;
 }
+
+FileContents drain_file(const char *file_name) {
+  FileContents fc = {
+      .capacity = 10, .size = 0, .items = (char *)malloc(sizeof(char) * 10)};
+  const int LINE_BUF_SZ = 1 << 8;
+  char lbuffer[LINE_BUF_SZ];
+  FILE *file = fopen(file_name, "r");
+  if (file == NULL) {
+    eprintf("[ERROR]: Could not open file!");
+    fclose(file);
+    exit(EXIT_FAILURE);
+  }
+
+  while (fgets(lbuffer, LINE_BUF_SZ, file) != NULL) {
+    char *line = lbuffer;
+    while (*line != '\0') {
+      // printf("%c", *line);
+      alist_append(&fc, *line);
+      line++;
+    }
+  }
+  return fc;
+}

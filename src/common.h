@@ -12,8 +12,7 @@ do {\
 
 #define AL_RESIZE_INC 1 << 3
 
-#define alist_last(al) (assert((al)-> size > 0 && "[ERROR]: No room in array list!"),\
-(al)->items[(al)->count-1]) 
+#define alist_last(al) (al)->items[(al)->size-1]
 
 #define alist_append(al, item) do {                                          \
   if ((al)->capacity - (al)->size == 0) {                                    \
@@ -24,8 +23,21 @@ do {\
   (al)->items[(al)->size++] = (item);                                        \
 }while(0)
 
+#define alist_free(al) do {   \
+ (al)->size = 0;              \
+ (al)->capacity = 0           \
+ free((al)->items);           \
+}while(0)
+
+//TYPE DECLARATIONS
+typedef struct _FileContents {
+  size_t capacity;
+  size_t size;
+  char *items;
+} FileContents;
 
 // common string manip functions
 void strip_newline(char *str);
 unsigned int get_num_lines(FILE *file);
+FileContents drain_file(const char* file_name);
 #endif  // INCLUDE_SRC_COMMON_H_

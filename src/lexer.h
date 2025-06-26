@@ -44,5 +44,6 @@ TokenList tokenize(Lexer *l);
 Token get_first(TokenList *tlist);
 void print_tokens(TokenList *tlist);
 Lexer new_lexer(const char* text, const TokenMap *tm);
+TokenList tokenize_file(const char *file_name, const TokenMap *tm);
 
 #endif  // INCLUDE_SRC_LEXER_H_
