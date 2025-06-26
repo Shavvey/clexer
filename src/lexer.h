@@ -25,7 +25,6 @@ typedef struct _Lexer {
   TokenList tokens;
   const TokenMap map;
   unsigned int cursor; // points to current line content
-  unsigned int bol; // beginning of line
 } Lexer;
 
 typedef struct _Match {
