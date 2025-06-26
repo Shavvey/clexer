@@ -1,6 +1,6 @@
 #include "lexer.h"
+#include "common.h"
 #include "parser.h"
-#include "regex/re.h"
 #include <stdlib.h>
 
 void chop_left(Lexer *l) {
@@ -33,29 +33,58 @@ MatchSet new_matches(size_t capacity) {
   return ms;
 }
 
-void get_matches(MatchSet *ms, const char *text, re_t *regexes) {
-  
+static void print_match(Match *m) {
+  printf("Match idx: %d\n", m->idx);
+  printf("Match length: %d\n", m->length);
+}
+
+void print_matchset(const MatchSet *ms) {
+  for (int i = 0; i < ms->size; i++) {
+    print_match(&ms->items[i]);
+  }
 }
 
 void clear_matches(MatchSet *ms) {
-  
+  ms->size = 0;
+  // NOTE: we could zero out array list here, but why bother?
 }
+
+void get_matches(MatchSet *ms, const char *text, const TokenMap *tm) {
+  // NOTE: this is really inefficient! but the re_compile forces us to deep copy the results,
+  // which I DO NOT want to do, so for now we compile and exec each lexer loop (which is very bad)
+  Match m = {0};
+  for (int i = 0; i < tm->size; i++) {
+    Rule r = tm->items[i];
+    m.idx = re_match(r.regex, text, &m.length);
+    alist_append(ms, m);
+  } 
+}
+
+int get_max_idx(MatchSet *ms) {
+  int idx = -1;
+  Match max = ms->items[0];
+  for (int i = 0; i < ms->size; i++) {
+    Match m = ms->items[i]; 
+    if (m.idx == 0 && max.length < m.length) {
+      max = m;
+      idx = i;
+    }
+  }
+  return idx;
+}
+
+Token munch(Lexer *l, Rule r) {
+
+}
+
 
 TokenList tokenize(Lexer *l) {
   chop_left(l);
-  MatchSet ms = new_matches(l->map.size);
-  re_t regexes[l->map.size];
-  TokenMap tp = l->map;
-
-  // iterate through token map and contruct regexes
-  for (int i = 0; i < tp.size; i++) {
-    Rule r = tp.items[i];
-    print_rule(&r);
-    re_t regex = re_compile(r.regex);
-    regexes[i] = regex;
-  }
-
-  get_matches(&ms, l->content + l->cursor, regexes);
-
+  const TokenMap tm = l->map;
+  MatchSet ms = new_matches(tm.capacity);
+  get_matches(&ms, l->content + l->cursor, &tm);
+  print_matchset(&ms);
+  int idx = get_max_idx(&ms);
+  printf("Max match result is at: %d\n", idx);
   return l->tokens;
 }

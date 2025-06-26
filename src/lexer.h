@@ -6,6 +6,7 @@
 
 // DEPS
 #include "parser.h"
+#include "regex/re.h"
 
 // TYPE DECLARATIONS
 typedef struct _Token {
@@ -29,7 +30,7 @@ typedef struct _Lexer {
 
 typedef struct _Match {
   int idx;
-  int lenght;
+  int length;
 } Match;
 
 typedef struct _MatchSet {
@@ -37,6 +38,7 @@ typedef struct _MatchSet {
   size_t size;
   Match *items; 
 } MatchSet;
+
 
 // API
 TokenList tokenize(Lexer *l);

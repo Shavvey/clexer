@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Rule parse_rule(const char *line) {
+static Rule parse_rule(const char *line) {
   int tcount = 1;
   int rcount = 1;
 
@@ -84,7 +84,7 @@ TokenMap gen_rules(const char *fname) {
 
 void print_rule(Rule *rule) {
   printf("Token name: %s\n", rule->tname);
-  printf("Regex %s\n", rule->regex);
+  printf("Regex: %s\n", rule->regex);
 }
 
 void print_tmap(TokenMap *tm) {

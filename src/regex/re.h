@@ -40,6 +40,17 @@
 extern "C"{
 #endif
 
+enum { UNUSED, DOT, BEGIN, END, QUESTIONMARK, STAR, PLUS, CHAR, CHAR_CLASS, INV_CHAR_CLASS, DIGIT, NOT_DIGIT, ALPHA, NOT_ALPHA, WHITESPACE, NOT_WHITESPACE, /* BRANCH */ };
+
+typedef struct regex_t
+{
+  unsigned char  type;   /* CHAR, STAR, etc.                      */
+  union
+  {
+    unsigned char  ch;   /*      the character itself             */
+    unsigned char* ccl;  /*  OR  a pointer to characters in class */
+  } u;
+} regex_t;
 
 
 /* Typedef'd pointer to get abstract datatype. */
@@ -57,7 +68,7 @@ int re_matchp(re_t pattern, const char* text, int* matchlength);
 /* Find matches of the txt pattern inside text (will compile automatically first). */
 int re_match(const char* pattern, const char* text, int* matchlength);
 
-
+void re_print(re_t pattern);
 #ifdef __cplusplus
 }
 #endif
