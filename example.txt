@@ -1,6 +1,6 @@
 int main() {
-  for (int i = 0; i < 5; i = i + 1) {
-    printf("Hello World\n");
+  for (int i = 0; i < 5; i++) {
+    printf("Hello, World!\n");
   }
   return EXIT_SUCESS;
 }

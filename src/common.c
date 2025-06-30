@@ -12,6 +12,7 @@ void strip_newline(char *str) {
 
 // NOTE: this function doesn't close the file
 unsigned int get_num_lines(FILE *file) {
+  if (file == NULL) return -1;
   unsigned int lcount = 0;
   while (!feof(file)) {
     char c = fgetc(file);
