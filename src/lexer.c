@@ -55,7 +55,6 @@ void print_matchset(const MatchSet *ms) {
 }
 
 void clear_matches(MatchSet *ms) {
-  ms->capacity += ms->size;
   ms->size = 0;
   // NOTE: we could zero out array list here, but why bother?
 }
