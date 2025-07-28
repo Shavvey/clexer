@@ -107,14 +107,13 @@ TokenList tokenize(Lexer *l) {
     int idx = get_max_idx(&ms);
     if(idx > -1) {
       Token t = munch(l, tm.items[idx].tname, ms.items[idx].length);
-      print_token(t);
       alist_append(&l->tokens, t);
-      clear_matches(&ms);
     } else {
       // TODO: more robust error reporting would be nice
-      eprintf("Could not match char: %c\n", l->content[l->cursor]);
+      eprintf("[ERROR]: Could not match char: %c\n", l->content[l->cursor]);
       l->cursor++;
     }
+    clear_matches(&ms);
     chop_left(l);
   }
   return l->tokens;
