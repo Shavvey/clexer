@@ -100,18 +100,23 @@ static Token munch(Lexer *l, const char *tname, size_t length) {
 TokenList tokenize(Lexer *l) {
   chop_left(l);
   const TokenMap tm = l->map;
-  printf("Length of map: %zu\n", tm.size);
   MatchSet ms = new_matches(tm.capacity);
   while (l->content[l->cursor] != '\0') {
     chop_left(l);
     get_matches(&ms, l->content + l->cursor, &tm);
     int idx = get_max_idx(&ms);
-    Token t = munch(l, tm.items[idx].tname, ms.items[idx].length);
-    print_token(t);
-    clear_matches(&ms);
-    alist_append(&l->tokens, t);
+    if(idx > -1) {
+      Token t = munch(l, tm.items[idx].tname, ms.items[idx].length);
+      print_token(t);
+      alist_append(&l->tokens, t);
+      clear_matches(&ms);
+    } else {
+      // TODO: more robust error reporting would be nice
+      eprintf("Could not match char: %c\n", l->content[l->cursor]);
+      l->cursor++;
+    }
+    chop_left(l);
   }
-  printf("What!\n");
   return l->tokens;
 }
 
