@@ -12,11 +12,14 @@ void chop_left(Lexer *l) {
     c = l->content[l->cursor];
   }
 }
+void print_token(Token t) {
+    printf("TOKEN: %s(%s)\n", t.kind, t.content);
+}
 
 void print_tokens(TokenList *tlist) {
   for (int i = 0; i < tlist->size; i++) {
     Token t = tlist->items[i];
-    printf("TOKEN: %s(%s)\n", t.kind, t.content);
+    print_token(t);
   }
 }
 
@@ -85,10 +88,11 @@ int get_max_idx(MatchSet *ms) {
 }
 
 static Token munch(Lexer *l, const char *tname, size_t length) {
-  char *tkcontent = (char *)malloc(sizeof(char) * length);
+  char *tkcontent = (char *)malloc(sizeof(char) * length + 1);
   strncpy(tkcontent, l->content + l->cursor, length);
   l->cursor += length;
-  chop_left(l);
+  // null terminate constructed string
+  tkcontent[length] = '\0';
   Token t = {.kind = tname, .content = tkcontent};
   return t;
 }
@@ -96,14 +100,18 @@ static Token munch(Lexer *l, const char *tname, size_t length) {
 TokenList tokenize(Lexer *l) {
   chop_left(l);
   const TokenMap tm = l->map;
+  printf("Length of map: %zu\n", tm.size);
+  MatchSet ms = new_matches(tm.capacity);
   while (l->content[l->cursor] != '\0') {
-    MatchSet ms = new_matches(tm.capacity);
+    chop_left(l);
     get_matches(&ms, l->content + l->cursor, &tm);
     int idx = get_max_idx(&ms);
     Token t = munch(l, tm.items[idx].tname, ms.items[idx].length);
-    alist_append(&l->tokens, t);
+    print_token(t);
     clear_matches(&ms);
+    alist_append(&l->tokens, t);
   }
+  printf("What!\n");
   return l->tokens;
 }
 
