@@ -3,11 +3,12 @@
 #include "parser.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 void chop_left(Lexer *l) {
   // cut out white space and newlines
   char c = l->content[l->cursor];
-  while (c == '\n' || c == ' ') {
+  while (c == '\n' || c == ' ' || c == '\r') {
     l->cursor += 1;
     c = l->content[l->cursor];
   }
@@ -97,24 +98,37 @@ static Token munch(Lexer *l, const char *tname, size_t length) {
   return t;
 }
 
+static bool is_printable_ascii(char c) {
+  if (c >= 33 && c <= 126) {
+    return true;
+  }
+  return false;
+}
+
 TokenList tokenize(Lexer *l) {
   chop_left(l);
   const TokenMap tm = l->map;
   MatchSet ms = new_matches(tm.capacity);
   while (l->content[l->cursor] != '\0') {
-    chop_left(l);
     get_matches(&ms, l->content + l->cursor, &tm);
     int idx = get_max_idx(&ms);
     if(idx > -1) {
       Token t = munch(l, tm.items[idx].tname, ms.items[idx].length);
       alist_append(&l->tokens, t);
     } else {
-      // TODO: more robust error reporting would be nice
-      eprintf("[ERROR]: Could not match char: %c\n", l->content[l->cursor]);
-      l->cursor++;
+      char c = l->content[l->cursor]; 
+      // check to see if this is a control character, ignore if this is the case
+      if (!is_printable_ascii(c)) {
+        l->cursor++;
+      } else {
+        // TODO: some better error reporting maybe?
+        eprintf("[ERROR]: Could not match content: \"%c\" at %d\n",
+                c, l->cursor);
+        l->cursor++;
+      }
     }
-    clear_matches(&ms);
     chop_left(l);
+    clear_matches(&ms);
   }
   return l->tokens;
 }
