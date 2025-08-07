@@ -1,9 +1,9 @@
 #include "lexer.h"
 #include "common.h"
 #include "parser.h"
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 void chop_left(Lexer *l) {
   // cut out white space and newlines
@@ -13,9 +13,8 @@ void chop_left(Lexer *l) {
     c = l->content[l->cursor];
   }
 }
-void print_token(Token t) {
-    printf("TOKEN: %s(%s)\n", t.kind, t.content);
-}
+
+void print_token(Token t) { printf("TOKEN: %s(%s)\n", t.kind, t.content); }
 
 void print_tokens(TokenList *tlist) {
   for (int i = 0; i < tlist->size; i++) {
@@ -90,6 +89,7 @@ int get_max_idx(MatchSet *ms) {
 
 static Token munch(Lexer *l, const char *tname, size_t length) {
   char *tkcontent = (char *)malloc(sizeof(char) * length + 1);
+  // NOTE: maybe free up this allocation later before exiting?
   strncpy(tkcontent, l->content + l->cursor, length);
   l->cursor += length;
   // null terminate constructed string
@@ -112,18 +112,18 @@ TokenList tokenize(Lexer *l) {
   while (l->content[l->cursor] != '\0') {
     get_matches(&ms, l->content + l->cursor, &tm);
     int idx = get_max_idx(&ms);
-    if(idx > -1) {
+    if (idx > -1) {
       Token t = munch(l, tm.items[idx].tname, ms.items[idx].length);
       alist_append(&l->tokens, t);
     } else {
-      char c = l->content[l->cursor]; 
+      char c = l->content[l->cursor];
       // check to see if this is a control character, ignore if this is the case
       if (!is_printable_ascii(c)) {
         l->cursor++;
       } else {
         // TODO: some better error reporting maybe?
-        eprintf("[ERROR]: Could not match content: \"%c\" at %d\n",
-                c, l->cursor);
+        eprintf("[ERROR]: Could not match content: \"%c\" at %d\n", c,
+                l->cursor);
         l->cursor++;
       }
     }
