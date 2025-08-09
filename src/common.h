@@ -25,7 +25,7 @@ do {\
 
 #define alist_free(al) do {   \
  (al)->size = 0;              \
- (al)->capacity = 0           \
+ (al)->capacity = 0;          \
  free((al)->items);           \
 }while(0)
 
