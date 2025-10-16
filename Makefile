@@ -1,10 +1,11 @@
 # choice of compiler w/ flags
 CC=gcc
 FLAGS=-W -Wall -g
-# sdl flags and included libs
-# executable name, object files to be created, and dependencies for object files
+# exec name
 EXEC=clexer
+# object files that will be linked together
 OBJS=src/lexer.o src/main.o src/parser.o src/common.o src/regex/re.o
+# header defs
 DEPS=src/lexer.h src/common.h src/parser.h src/regex/re.h 
 
 # make dependencies to create the final executable
@@ -16,7 +17,7 @@ all: $(EXEC)
 
 # rule to make the final executable from the created object files
 $(EXEC): $(OBJS)
-	$(CC) $(CFLAGS) $(SDL_CFLAGS) $(OBJS) -o $(EXEC) 
+	$(CC) $(CFLAGS) $(OBJS) -o $(EXEC)
 
 # clean out the object files and the final executable
 .PHONY: clean
